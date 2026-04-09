@@ -47,7 +47,7 @@
         },
         "bytecodeCopilot.maxTokens": {
           "type": "number",
-          "default": 100,
+          "default": 200,
           "description": "Maximum tokens per completion"
         },
         "bytecodeCopilot.temperature": {
@@ -59,7 +59,7 @@
         },
         "bytecodeCopilot.debounceMs": {
           "type": "number",
-          "default": 200,
+          "default": 150,
           "minimum": 0,
           "maximum": 5000,
           "description": "Debounce delay in milliseconds"

@@ -27,9 +27,9 @@ export function getConfig(): ExtensionConfig {
     enabled: config.get<boolean>('enabled', true),
     apiEndpoint: config.get<string>('apiEndpoint', 'https://ark.cn-beijing.volces.com/api/coding/v1/messages'),
     model: config.get<string>('model', 'doubao-seed-2.0-lite'),
-    maxTokens: config.get<number>('maxTokens', 100),
+    maxTokens: config.get<number>('maxTokens', 200),
     temperature: config.get<number>('temperature', 0.1),
-    debounceMs: config.get<number>('debounceMs', 200),
+    debounceMs: config.get<number>('debounceMs', 150),
   };
 }
 

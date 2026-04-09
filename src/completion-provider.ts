@@ -129,7 +129,7 @@ export class ByteCodeCompletionProvider implements vscode.InlineCompletionItemPr
       this.cache.delete(cacheKey);
       cached.lastAccessed = Date.now();
       this.cache.set(cacheKey, cached);
-      return this.createCompletionList(cached.completion, position);
+      return this.createCompletionList(cached.completion, document, position);
     }
 
     // Build prompt
@@ -168,7 +168,7 @@ export class ByteCodeCompletionProvider implements vscode.InlineCompletionItemPr
       // Cache the result (always cache the original if we use fallback)
       this.setCache(cacheKey, finalCompletion);
 
-      const result = this.createCompletionList(finalCompletion, position);
+      const result = this.createCompletionList(finalCompletion, document, position);
       logger.debug(`Returning ${result.items.length} completion item(s)`);
       return result;
     } catch (error) {
@@ -204,13 +204,22 @@ export class ByteCodeCompletionProvider implements vscode.InlineCompletionItemPr
 
   private createCompletionList(
     text: string,
+    document: vscode.TextDocument,
     position: vscode.Position
   ): vscode.InlineCompletionList {
-    // Use a simpler approach - just create the item with text
-    // VS Code will handle the range automatically if not specified
+    // Find the word start position before the cursor
+    const lineText = document.lineAt(position.line).text;
+    let wordStart = position.character;
+    while (wordStart > 0 && /[\w$]/.test(lineText[wordStart - 1])) {
+      wordStart--;
+    }
+    const range = new vscode.Range(
+      position.line, wordStart,
+      position.line, position.character
+    );
     const item = new vscode.InlineCompletionItem(text);
     item.insertText = text;
-    // Don't set range - let VS Code infer it
+    item.range = range;
     return new vscode.InlineCompletionList([item]);
   }
 

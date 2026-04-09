@@ -13,6 +13,9 @@ const MAX_SUFFIX_CHARS = 2000;
 export function buildPrompt(context: PromptContext): string {
   const { prefix, suffix, fileName, language } = context;
 
+  // 提取当前正在输入的单词
+  const currentWord = extractCurrentWord(prefix);
+
   const truncatedPrefix = truncatePrefix(prefix);
   const truncatedSuffix = truncateSuffix(suffix);
 
@@ -27,6 +30,10 @@ STRICT RULES - FOLLOW THESE EXACTLY:
 6. Stop at the first natural completion point (e.g., end of line, closing bracket, semicolon)
 7. Match the existing indentation and coding style
 8. Prioritize correctness and readability
+9. Look for variables and functions defined earlier in the code and use them for context-aware completions
+10. If the user is typing a partial word, complete it based on common patterns and context
+
+${currentWord ? `IMPORTANT: The user is currently typing: "${currentWord}". Complete this word/identifier based on the context. Look for matching variable/function names defined earlier.` : ''}
 
 CONTEXT:
 - File: ${fileName}
@@ -41,6 +48,12 @@ ${truncatedPrefix}
 ${truncatedSuffix}
 
 === YOUR CODE COMPLETION ===`;
+}
+
+function extractCurrentWord(text: string): string {
+  // 从文本末尾提取当前正在输入的单词
+  const wordMatch = text.match(/[\w$]+$/);
+  return wordMatch ? wordMatch[0] : '';
 }
 
 function truncatePrefix(prefix: string): string {
