@@ -207,16 +207,12 @@ export class ByteCodeCompletionProvider implements vscode.InlineCompletionItemPr
     document: vscode.TextDocument,
     position: vscode.Position
   ): vscode.InlineCompletionList {
-    // Find the word start position before the cursor
-    const lineText = document.lineAt(position.line).text;
-    let wordStart = position.character;
-    while (wordStart > 0 && /[\w$]/.test(lineText[wordStart - 1])) {
-      wordStart--;
-    }
-    const range = new vscode.Range(
-      position.line, wordStart,
-      position.line, position.character
-    );
+    // Use VS Code's built-in word boundary detection
+    const wordRange = document.getWordRangeAtPosition(position);
+    const range = wordRange
+      ? new vscode.Range(wordRange.start, position)
+      : new vscode.Range(position, position);
+
     const item = new vscode.InlineCompletionItem(text);
     item.insertText = text;
     item.range = range;
