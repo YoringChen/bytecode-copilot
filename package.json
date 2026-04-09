@@ -1,0 +1,87 @@
+{
+  "name": "bytecode-copilot",
+  "displayName": "ByteCode Copilot",
+  "description": "Inline code completion using ByteDance Code Planning API",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "AI"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bytecodeCopilot.setApiKey",
+        "title": "ByteCode: Set API Key"
+      }
+    ],
+    "configuration": {
+      "title": "ByteCode Copilot",
+      "properties": {
+        "bytecodeCopilot.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable ByteCode Copilot"
+        },
+        "bytecodeCopilot.apiEndpoint": {
+          "type": "string",
+          "default": "https://ark.cn-beijing.volces.com/api/coding/v1/messages",
+          "description": "API endpoint URL"
+        },
+        "bytecodeCopilot.apiKey": {
+          "type": "string",
+          "description": "API Key for authentication (deprecated - use command to set API Key)",
+          "scope": "machine",
+          "ignoreSync": true
+        },
+        "bytecodeCopilot.model": {
+          "type": "string",
+          "default": "doubao-seed-2.0-lite",
+          "description": "Model name to use"
+        },
+        "bytecodeCopilot.maxTokens": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum tokens per completion"
+        },
+        "bytecodeCopilot.temperature": {
+          "type": "number",
+          "default": 0.1,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Sampling temperature"
+        },
+        "bytecodeCopilot.debounceMs": {
+          "type": "number",
+          "default": 200,
+          "minimum": 0,
+          "maximum": 5000,
+          "description": "Debounce delay in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && mocha out/test/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.x",
+    "@types/sinon": "^17.0.2",
+    "@types/vscode": "^1.80.0",
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "sinon": "^17.0.1",
+    "typescript": "^5.3.0"
+  }
+}
